@@ -13,6 +13,7 @@ body{
     display: flex;
     height: 100px;
     width: 100%;
+    margin-bottom: 20px;
     justify-content: center;
     align-items: center;
 }
@@ -40,7 +41,7 @@ body{
     font-size: 40px;
     color: rgb(255, 255, 255);
 }
-.search-div > 
+.search-div >
 .search{
     height: 50px;
     width: 400px;
@@ -91,11 +92,6 @@ body{
     max-height: 100%;
     margin-top: -200;
     /* border: white solid 1px; */
-    border-radius: 50%;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    -ms-border-radius: 50%;
-    -o-border-radius: 50%;
 }
 .image-pokemon-div{
     display: flex;
@@ -128,6 +124,4 @@ body{
     -moz-border-radius: 300%;
     -ms-border-radius: 300%;
     -o-border-radius: 300%;
-}
-#next #previous{
 }

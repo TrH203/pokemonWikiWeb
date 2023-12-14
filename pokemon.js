@@ -7,7 +7,7 @@ let innerBox = document.getElementById("inner-box");
 let search_icon = document.getElementById("icon");
 let next = document.getElementById("next");
 let previous = document.getElementById("previous");
-
+let currID;
 
 const changeColor = (typeName) => {
     switch (typeName) {
@@ -24,7 +24,7 @@ const changeColor = (typeName) => {
         case "poison":
             return "#8d3ecda0"
         case "electric":
-            return "#ffff00f2"
+            return "#ffe445"
         case "ground":
             return "#d9b65e"
         case "ghost":
@@ -40,8 +40,10 @@ const changeColor = (typeName) => {
 const upperName = (name) => {
     return name[0].toUpperCase() + name.slice(1);
 }
-const searchFunc = () => {
-    let name = search_bar.value;
+const searchFunc = (name = "") => {
+    if (name === "") {
+        name = search_bar.value;
+    }
     fetchData(name);
 }
 const getRandomID = () => {
@@ -53,16 +55,30 @@ const getRandomID = () => {
     }
     return random;
 }
-const NextPreFunc = (isNext) => {
-    if (isNext) {
+const changeColorElement = (color) => {
+    innerBox.style.borderColor = color;
+    btn.style.backgroundColor = color;
+    search_bar.style.borderColor = color;
+    search_icon.style.color = color;
+    previous.style.color = color;
+    next.style.color = color;
+}
+const updateStats = (json) => {
+    let id = document.getElementById("stats-id");
+    let height = document.getElementById("stats-height");
+    let weight = document.getElementById("stats-weight");
+    let type = document.getElementById("stats-type");
+    let be = document.getElementById("stats-be");
+    let skill = document.getElementById("stats-skill");
+    id.in
 
-    }
 }
 
 const fetchData = async (name) => {
     btn.disabled = true; // disable button -> restrict spamming
     search_bar.value = "";
     let url;
+    name = "" + name; //convert to all string
     name = name.toLowerCase();
     if (name !== "") {
         url = `https://pokeapi.co/api/v2/pokemon/${name}/`
@@ -74,18 +90,17 @@ const fetchData = async (name) => {
         let response = await fetch(url);
         let json = await response.json();
         console.log(json);
+        currID = json.id; // catch current id
+
         pokemon.src = json.sprites.front_default;
         pokemon_name.innerText = upperName(json.name);
-        innerBox.style.borderColor = changeColor(json.types[0].type.name);
-        btn.style.backgroundColor = changeColor(json.types[0].type.name);
-        search_bar.style.borderColor = changeColor(json.types[0].type.name);
-        search_icon.style.color = changeColor(json.types[0].type.name);
-        previous.style.color = changeColor(json.types[0].type.name);
-        next.style.color = changeColor(json.types[0].type.name);
+
+        let color = changeColor(json.types[0].type.name);
+        changeColorElement(color);
         for (let i of json.types) {
             console.log(i.type.name);
         }
-        setTimeout(() => { btn.disabled = false }, 1000);
+        setTimeout(() => { btn.disabled = false }, 500);
     }
     catch (e) {
         console.log(e);
@@ -101,7 +116,8 @@ search_bar.onkeyup = (e) => {
     }
 }
 next.onclick = () => {
+    searchFunc(currID + 1);
 }
 previous.onclick = () => {
-    searchFunc();
+    searchFunc(currID - 1);
 }
