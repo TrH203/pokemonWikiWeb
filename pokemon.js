@@ -146,7 +146,7 @@ const fetchData = async (name) => {
         updateStats(json);
     }
     catch (e) {
-        alert("This pokemon is not existed");
+        alert("This pokemon is not existed, Please type again");
         console.log(e);
     }
 }
