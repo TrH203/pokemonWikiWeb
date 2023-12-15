@@ -13,10 +13,18 @@
         <img class="logo" src="pokemon.svg" height="200px" width="200">
     </div>
     <div class="search-div">
-        <span><i id="icon" class="fa-brands fa-searchengin"></i></span>
-        <input class="search" id="search-bar" type="text" onkeyup="" placeholder="Find your pokemon">
+        <!-- <span><i id="icon" class="fa-brands fa-searchengin"></i></span> -->
+        <div class="wrapper">
+            <input class="search" id="search-bar" type="text" onkeyup="" placeholder="Find your pokemon">
+            <div id="suggestion-box" class="autosuggest">
+                <li class="suggest-list">Hello how are you</li>
+                <li class="suggest-list">Hello how are you</li>
+                <li class="suggest-list">Hello how are you</li>
+                <li class="suggest-list">Hello how are you</li>
+            </div>
+        </div>
         <button id="btn" onclick="">
-            Get Random Pokemon
+            Random Pokemon
             <i id="icon" class="fa-brands fa-searchengin"></i>
         </button>
     </div>
@@ -48,6 +56,7 @@
         </div>
     </div>
     <script src="pokemon.js"></script>
+    <script src="suggestions.js"></script>
 </body>
 
 </html>

@@ -4,9 +4,9 @@ let btn = document.getElementById("btn");
 let pokemon_name = document.getElementById("pokemon-name")
 let search_bar = document.getElementById("search-bar");
 let innerBox = document.getElementById("inner-box");
-let search_icon = document.getElementById("icon");
 let next = document.getElementById("next");
 let previous = document.getElementById("previous");
+let suggestionBox = document.getElementById("suggestion-box");
 let currID;
 
 const changeColor = (typeName) => {
@@ -53,6 +53,7 @@ const searchFunc = (name = "") => {
         name = search_bar.value;
     }
     fetchData(name);
+    suggestionBox.classList.remove('active');
 }
 const getRandomID = () => {
     // api have from 1 -> 1017 and 10001 -> 10275
@@ -75,7 +76,6 @@ const changeColorElement = (json) => {
     innerBox.style.borderRightColor = color2;
     btn.style.backgroundColor = color1;
     search_bar.style.borderColor = color1;
-    search_icon.style.color = color1;
     previous.style.color = color1;
     next.style.color = color1;
 }
@@ -101,7 +101,18 @@ const updateStats = (json) => {
 
 
 }
-
+const showSuggestions = (list) => {
+    suggestionBox.classList.remove("active");
+    let listData;
+    if (!list.length) {
+        listData = "";
+    }
+    else {
+        listData = list.join('');
+    }
+    suggestionBox.classList.add("active");
+    suggestionBox.innerHTML = listData;
+}
 const fetchData = async (name) => {
     btn.disabled = true; // disable button -> restrict spamming
     search_bar.value = "";
@@ -132,12 +143,32 @@ const fetchData = async (name) => {
         btn.disabled = false;
     }
 }
+
+
 btn.onclick = () => {
     searchFunc();
 }
 search_bar.onkeyup = (e) => {
     if (e.keyCode === 13) {
         searchFunc();
+    }
+    else {
+        console.log(e.target.value);
+        if (e.target.value !== "") {
+            let suggestArray = suggestions.filter((name) => name.includes(e.target.value.toLowerCase()));
+            let suggestList = suggestArray.map((list) => { return `<li class="suggest-list">${list}</li>` })
+            console.log(suggestList)
+            showSuggestions(suggestList);
+            let allList = document.querySelectorAll(".suggest-list");
+            for (let list of allList) {
+                list.onclick = () => {
+                    searchFunc(list.innerText);
+                }
+            }
+        }
+        else {
+            showSuggestions("");
+        }
     }
 }
 next.onclick = () => {
