@@ -33,6 +33,14 @@ const changeColor = (typeName) => {
             return "#ff00ff"
         case "ice":
             return "#6ac6de"
+        case "fairy":
+            return "#b6d7a8"
+        case "dragon":
+            return "#e06666"
+        case "steel":
+            return "#a8a8a8"
+        case "flying":
+            return "#a2c4c9"
         default:
             return "#bcbcbc"
     }
@@ -55,13 +63,21 @@ const getRandomID = () => {
     }
     return random;
 }
-const changeColorElement = (color) => {
-    innerBox.style.borderColor = color;
-    btn.style.backgroundColor = color;
-    search_bar.style.borderColor = color;
-    search_icon.style.color = color;
-    previous.style.color = color;
-    next.style.color = color;
+const changeColorElement = (json) => {
+    let color1 = changeColor(json.types[0].type.name);
+    let color2 = color1;
+    if (json.types.length > 1) {
+        color1 = changeColor(json.types[0].type.name);
+        color2 = changeColor(json.types[1].type.name);
+    }
+    innerBox.style.borderColor = color1;
+    innerBox.style.borderLeftColor = color2;
+    innerBox.style.borderRightColor = color2;
+    btn.style.backgroundColor = color1;
+    search_bar.style.borderColor = color1;
+    search_icon.style.color = color1;
+    previous.style.color = color1;
+    next.style.color = color1;
 }
 const updateStats = (json) => {
     let id = document.getElementById("stats-id");
@@ -69,8 +85,20 @@ const updateStats = (json) => {
     let weight = document.getElementById("stats-weight");
     let type = document.getElementById("stats-type");
     let be = document.getElementById("stats-be");
-    let skill = document.getElementById("stats-skill");
-    id.in
+    let stats = document.getElementById("stats-stats");
+    id.innerText = `ID: ${json.id}`;
+    height.innerText = `Height: ${json.height}`;
+    be.innerText = `${json.base_experience} :Base Experience`;
+    weight.innerText = `Weight: ${json.weight}`;
+    stats.innerText = `${json.stats[0].base_stat} :Stats`
+    let rsType = "";
+    for (t of json.types) {
+        rsType += t["type"]["name"] + " ";
+    }
+    console.log(rsType);
+    type.innerText = `${rsType} :Type`;
+
+
 
 }
 
@@ -95,11 +123,8 @@ const fetchData = async (name) => {
         pokemon.src = json.sprites.front_default;
         pokemon_name.innerText = upperName(json.name);
 
-        let color = changeColor(json.types[0].type.name);
-        changeColorElement(color);
-        for (let i of json.types) {
-            console.log(i.type.name);
-        }
+        changeColorElement(json);
+        updateStats(json);
         setTimeout(() => { btn.disabled = false }, 500);
     }
     catch (e) {
