@@ -113,8 +113,16 @@ const showSuggestions = (list) => {
     suggestionBox.classList.add("active");
     suggestionBox.innerHTML = listData;
 }
+const clickSuggestions = () => {
+    let allList = document.querySelectorAll(".suggest-list");
+    allList[0]
+    for (let list of allList) {
+        list.onclick = () => {
+            searchFunc(list.innerText);
+        }
+    }
+}
 const fetchData = async (name) => {
-    btn.disabled = true; // disable button -> restrict spamming
     search_bar.value = "";
     let url;
     name = "" + name; //convert to all string
@@ -136,11 +144,10 @@ const fetchData = async (name) => {
 
         changeColorElement(json);
         updateStats(json);
-        setTimeout(() => { btn.disabled = false }, 500);
     }
     catch (e) {
+        alert("This pokemon is not existed");
         console.log(e);
-        btn.disabled = false;
     }
 }
 
@@ -155,16 +162,10 @@ search_bar.onkeyup = (e) => {
     else {
         console.log(e.target.value);
         if (e.target.value !== "") {
-            let suggestArray = suggestions.filter((name) => name.includes(e.target.value.toLowerCase()));
+            let suggestArray = suggestions.filter((name) => name.startsWith(e.target.value.toLowerCase()));
             let suggestList = suggestArray.map((list) => { return `<li class="suggest-list">${list}</li>` })
-            console.log(suggestList)
             showSuggestions(suggestList);
-            let allList = document.querySelectorAll(".suggest-list");
-            for (let list of allList) {
-                list.onclick = () => {
-                    searchFunc(list.innerText);
-                }
-            }
+            clickSuggestions();
         }
         else {
             showSuggestions("");
